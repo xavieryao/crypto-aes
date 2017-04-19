@@ -8,9 +8,9 @@
 #include <vector>
 #include <cstdio>
 
-typedef char Byte;
+typedef unsigned char Byte;
 
-class Mat : public std::vector<std::vector<Byte> > {
+class Mat: public std::vector<std::vector<Byte> > {
 public:
     Mat() : std::vector<std::vector<Byte> >(4, std::vector<Byte>(4, 0)) {
         // do nothing
@@ -23,16 +23,29 @@ public:
             }
             printf("\n");
         }
+        printf("\n");
     }
 };
+
+
 
 class AES {
 private:
     static Byte gMul(Byte a, Byte b);
-public:
-    static Byte* encrypt(Byte* input, int inputLen, Byte* key, int keyLen);
-    static Mat mixColumns(Mat state);
 
+public:
+    static Byte SBox[16][16];
+    static Byte Rcon[16][4];
+
+    static char* encrypt(char* input, int inputLen, char* key, int keyLen);
+    static void encrypt(Mat& input, Mat key, int round);
+    static void mixColumns(Mat& state);
+    static void subBytes(Mat& state);
+    static void shiftRows(Mat& state);
+    static void addRoundKey(Mat& state, Mat& roundKey);
+    static std::vector<Mat> expandKey(Mat& key, int n);
+    static void initSBox();
+    static void printSBox();
 };
 
 
